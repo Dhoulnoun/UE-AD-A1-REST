@@ -1,0 +1,131 @@
+---
+openapi: 3.0.0
+info:
+  title: Movie API
+  description: This is the API of the User service
+  contact:
+    email: younes.ghoniem@imt-atlantique.fr
+  license:
+    name: GPL v3
+    url: https://www.gnu.org/licenses/gpl-3.0.en.html
+  version: 1.0.0
+servers:
+  - url: https://virtserver.swaggerhub.com/UE-archi-distribuees/User/1.0.0
+    description: SwaggerHub API Auto Mocking
+tags:
+  - name: admins
+    description: Secured Admin-only calls
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /:
+    get:
+      tags:
+        - developers
+      summary: home page of the service
+      description: |
+        Nothing to do
+      operationId: home
+      responses:
+        "200":
+          description: welcome message
+          content:
+            text/html:
+              schema:
+                type: string
+                example: <h1>Test</h1>
+  /users:
+    get:
+      tags:
+        - developers
+      summary: get the full User JSON database
+      description: |
+        Nothing to do
+      operationId: get_users
+      response:
+        "200":
+          description: full JSON
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllUsers'
+  /users/{userid}:
+    get:
+      tags:
+        - developers
+      summary: get the user by its id
+      operationId: get_user_byid
+      description: |
+        By passing in the appropriate options, you can get info of a User
+      parameters:
+        - name: userid
+          in: path
+          required: true
+          description: User ID.
+          schema:
+            type: string
+            minimum: 1
+            maximum: 1
+      responses:
+        '200':
+          description: User description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserItem'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        -admins
+      summary: add a user item
+      description: Adds a user to the database
+      operationId: create_user
+      parameters:
+        - name: userid
+          in: path
+          description: User ID.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            maximum: 1
+            type: string
+      requestBody:
+        description: Information about the user you wish to add.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserItem'
+      responses:
+        "200":
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserItem'
+        "409":
+          description: Conflict an existing item already exists
+    delete:
+      tags:
+        -admins
+      summary: delete a user item
+      description: Removes a user from the db
+      operationId: delete_user
+      parameters:
+        - name: userid
+          in: path
+          description: User ID.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maximum: 1
+            minimum: 1
+            type: string
+          responses:
+            "200":
+              description: item deleted
+            "400":
+              description: ID not found
