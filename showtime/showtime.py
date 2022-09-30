@@ -8,12 +8,35 @@ PORT = 3202
 HOST = '0.0.0.0'
 
 with open('{}/databases/times.json'.format("."), "r") as jsf:
-   schedule = json.load(jsf)["schedule"]
+    schedule = json.load(jsf)["schedule"]
+
 
 @app.route("/", methods=['GET'])
 def home():
-   return "<h1 style='color:blue'>Welcome to the Showtime service!</h1>"
+    return "<h1 style='color:blue'>Welcome to the Showtime service!</h1>"
+
+
+"""getAll"""
+
+
+@app.route("/showtimes", methods=['GET'])
+def get_times():
+    res = make_response(jsonify(schedule), 200)
+    return res
+
+
+"""getScheduleByDate"""
+
+
+@app.route("/showtimes/<date>", methods=['GET'])
+def get_movies_bydate(date):
+    for time in schedule:
+        if str(time["date"]) == str(date):
+            res = make_response(jsonify(time), 200)
+            return res
+        return make_response(jsonify({"error": "no schedule for given date"}), 404)
+
 
 if __name__ == "__main__":
-   print("Server running in port %s"%(PORT))
-   app.run(host=HOST, port=PORT)
+    print("Server running in port %s" % (PORT))
+    app.run(host=HOST, port=PORT)
