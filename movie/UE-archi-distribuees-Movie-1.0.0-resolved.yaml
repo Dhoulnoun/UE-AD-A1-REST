@@ -48,34 +48,32 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MovieID'
+                $ref: '#/components/schemas/AllMovies'
   /movies/{movieid}:
     get:
       tags:
-      - developers
+        - developers
       summary: get the movie by its id
+      operationId: get_movie_byid
       description: |
         By passing in the appropriate options, you can get info of a Movie
-      operationId: get_movie_byid
       parameters:
-      - name: movieid
-        in: path
-        description: Movie ID.
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maximum: 1
-          minimum: 1
-          type: string
+        - name: movieid
+          in: path
+          required: true
+          description: Movie ID.
+          schema:
+            type: string
+            minimum: 1
+            maximum: 1
       responses:
-        "200":
+        '200':
           description: Movie description
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/MovieItem'
-        "400":
+        '400':
           description: bad input parameter
     post:
       tags:
@@ -194,26 +192,35 @@ paths:
           description: movie ID not found
 components:
   schemas:
-    MovieID:
-      required:
-      - id
+    AllMovies:
       type: object
+      required:
+        - movies
       properties:
-        id:
-          $ref: '#/components/schemas/MovieItem'
+        movies:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/MovieItem'
     MovieItem:
-      required:
-      - director
-      - rating
-      - title
       type: object
+      required:
+        - title
+        - rating
+        - director
+        - id
       properties:
         title:
           type: string
           example: The Martian
         rating:
-          type: string
-          example: "7"
+          type: integer
+          example: 7
         director:
           type: string
           example: Paul McGuigan
+        id:
+          type: string
+          example: 39ab85e5-5e8e-4dc5-afea-65dc368bd7ab
+
+
