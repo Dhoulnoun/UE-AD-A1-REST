@@ -129,3 +129,58 @@ paths:
               description: item deleted
             "400":
               description: ID not found
+  /bookedmovies/{userid}:
+    get:
+      tags:
+        - developers
+      summary: get the movies booked by a user
+      description: |
+        By passing in the appropriate options, you can get movies booked by a user
+      operationId: get_booking_for_user
+      parameters:
+        - name: userid
+          in: path
+          description: User ID.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maximum: 1
+            minimum: 1
+            type: string
+      responses:
+        "200":
+          description: movies booked by a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllBookings'
+        "400":
+          description: bad input parameter
+components:
+  schemas:
+    AllUsers:
+      type: object
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/UserItem'
+    UserItem:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          example: chris_rivers
+        name:
+          type: string
+          example: Chris Rivers
+        last_active:
+          type: integer
+          example: 1360031010
