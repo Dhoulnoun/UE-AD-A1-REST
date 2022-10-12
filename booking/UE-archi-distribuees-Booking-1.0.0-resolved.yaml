@@ -10,20 +10,20 @@ info:
     url: https://www.gnu.org/licenses/gpl-3.0.en.html
   version: 1.0.0
 servers:
-- url: https://virtserver.swaggerhub.com/UE-archi-distribuees/Booking/1.0.0
-  description: SwaggerHub API Auto Mocking
-- url: https://virtserver.swaggerhub.com/UE-archi-distribuees/Movie/1.0.0
-  description: SwaggerHub API Auto Mocking
+  - url: https://virtserver.swaggerhub.com/UE-archi-distribuees/Booking/1.0.0
+    description: SwaggerHub API Auto Mocking
+  - url: https://virtserver.swaggerhub.com/UE-archi-distribuees/Movie/1.0.0
+    description: SwaggerHub API Auto Mocking
 tags:
-- name: admins
-  description: Secured Admin-only calls
-- name: developers
-  description: Operations available to regular developers
+  - name: admins
+    description: Secured Admin-only calls
+  - name: developers
+    description: Operations available to regular developers
 paths:
   /:
     get:
       tags:
-      - developers
+        - developers
       summary: home page of the service
       description: |
         Nothing to do
@@ -39,7 +39,7 @@ paths:
   /bookings:
     get:
       tags:
-      - developers
+        - developers
       summary: get the full JSON database
       description: |
         Nothing to do
@@ -54,22 +54,22 @@ paths:
   /bookings/{userid}:
     get:
       tags:
-      - developers
+        - developers
       summary: get the bookings from a user id
       description: |
         By passing in the appropriate options, you can get bookings of a user
       operationId: get_booking_for_user
       parameters:
-      - name: userid
-        in: path
-        description: User ID.
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maximum: 1
-          minimum: 1
-          type: string
+        - name: userid
+          in: path
+          description: User ID.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maximum: 1
+            minimum: 1
+            type: string
       responses:
         "200":
           description: Bookings of the user
@@ -81,21 +81,21 @@ paths:
           description: bad input parameter
     post:
       tags:
-      - admins
+        - admins
       summary: add a booking for a user
       description: Adds a booking for the user
       operationId: add_booking_byuser
       parameters:
-      - name: userid
-        in: path
-        description: User ID.
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maximum: 1
-          minimum: 1
-          type: string
+        - name: userid
+          in: path
+          description: User ID.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maximum: 1
+            minimum: 1
+            type: string
       requestBody:
         description: item to add
         content:
@@ -119,8 +119,8 @@ components:
         $ref: '#/components/schemas/BookingsUser'
     BookingsUser:
       required:
-      - dates
-      - userid
+        - dates
+        - userid
       type: object
       properties:
         userid:
@@ -132,8 +132,8 @@ components:
             $ref: '#/components/schemas/DateItem'
     DateItem:
       required:
-      - date
-      - movies
+        - date
+        - movies
       type: object
       properties:
         date:
@@ -146,8 +146,8 @@ components:
             example: 276c79ec-a26a-40a6-b3d3-fb242a5947b6
     NewMovie:
       required:
-      - date
-      - movieid
+        - date
+        - movieid
       type: object
       properties:
         date:

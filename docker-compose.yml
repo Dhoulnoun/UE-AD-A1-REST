@@ -11,9 +11,9 @@ services:
   user:
     build: ./user/
     ports:
-        - "3203:3203"
+      - "3203:3203"
   booking:
     build: ./booking/
     ports:
-        - "3201:3201"
+      - "3201:3201"
 

@@ -10,20 +10,20 @@ info:
     url: https://www.gnu.org/licenses/gpl-3.0.en.html
   version: 1.0.0
 servers:
-- url: https://virtserver.swaggerhub.com/UE-archi-distribuees/Showtime/1.0.0
-  description: SwaggerHub API Auto Mocking
-- url: https://virtserver.swaggerhub.com/UE-archi-distribuees/Movie/1.0.0
-  description: SwaggerHub API Auto Mocking
+  - url: https://virtserver.swaggerhub.com/UE-archi-distribuees/Showtime/1.0.0
+    description: SwaggerHub API Auto Mocking
+  - url: https://virtserver.swaggerhub.com/UE-archi-distribuees/Movie/1.0.0
+    description: SwaggerHub API Auto Mocking
 tags:
-- name: admins
-  description: Secured Admin-only calls
-- name: developers
-  description: Operations available to regular developers
+  - name: admins
+    description: Secured Admin-only calls
+  - name: developers
+    description: Operations available to regular developers
 paths:
   /:
     get:
       tags:
-      - developers
+        - developers
       summary: home page of the service
       description: |
         Nothing to do
@@ -39,7 +39,7 @@ paths:
   /showtimes:
     get:
       tags:
-      - developers
+        - developers
       summary: get the full JSON database
       description: |
         Nothing to do
@@ -54,22 +54,22 @@ paths:
   /showmovies/{date}:
     get:
       tags:
-      - developers
+        - developers
       summary: get the schedule by date
       description: |
         Get the schedule for a given date
       operationId: get_movies_bydate
       parameters:
-      - name: date
-        in: path
-        description: date.
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maximum: 1
-          minimum: 1
-          type: string
+        - name: date
+          in: path
+          description: date.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maximum: 1
+            minimum: 1
+            type: string
       responses:
         "200":
           description: Schedule
@@ -83,7 +83,7 @@ components:
   schemas:
     AllSchedule:
       required:
-      - schedule
+        - schedule
       type: object
       properties:
         schedule:
@@ -92,8 +92,8 @@ components:
             $ref: '#/components/schemas/Schedule'
     Schedule:
       required:
-      - date
-      - movies
+        - date
+        - movies
       type: object
       properties:
         date:

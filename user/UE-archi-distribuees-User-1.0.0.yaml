@@ -107,6 +107,38 @@ paths:
                 $ref: '#/components/schemas/UserItem'
         "409":
           description: Conflict an existing item already exists
+    put:
+      tags:
+        -admins
+      summary: updates a user item
+      description: Updates a user item
+      operationId: update_user
+      parameters:
+        - name: userid
+          in: path
+          description: User ID.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            maximum: 1
+            type: string
+            response:
+              "200":
+                description: User Updated
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/UserItem'
+              "404":
+                description: User not found
+      requestBody:
+        description: Information about the user you wish to update.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserItem'
     delete:
       tags:
         -admins

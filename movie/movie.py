@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, render_template, request, jsonify, make_response, url_for
 import json
 import sys
 from werkzeug.exceptions import NotFound
@@ -6,7 +6,7 @@ from werkzeug.exceptions import NotFound
 app = Flask(__name__)
 
 PORT = 3200
-HOST = '0.0.0.0'
+HOST = 'localhost'
 
 with open('{}/databases/movies.json'.format("."), "r") as jsf:
     movies = json.load(jsf)["movies"]
@@ -23,14 +23,32 @@ def template():
     return make_response(render_template('index.html', body_text='This is my HTML template for Movie service'), 200)
 
 
-# getAll
+def has_no_empty_params(rule):
+    defaults = rule.defaults if rule.defaults is not None else ()
+    arguments = rule.arguments if rule.arguments is not None else ()
+    return len(defaults) >= len(arguments)
+
+
+@app.route("/movies/site_map", methods=['GET'])
+def site_map():
+    links = []
+    for rule in app.url_map.iter_rules():
+        # Filter out rules we can't navigate to in a browser
+        # and rules that require parameters
+        if "GET" in rule.methods and has_no_empty_params(rule):
+            url = url_for(rule.endpoint, **(rule.defaults or {}))
+            links.append((url, rule.endpoint))
+    return make_response(jsonify(links), 200)
+
+
+# getAll, retourne toutes les infos de la bd via la methode get au format json
 @app.route("/json", methods=['GET'])
 def get_json():
     res = make_response(jsonify(movies), 200)
     return res
 
 
-# getById
+# getMovieById: retrieves a movie with it's id returns a json object
 @app.route("/movies/<movieid>", methods=['GET'])
 def get_movie_byid(movieid):
     for movie in movies:
@@ -40,9 +58,7 @@ def get_movie_byid(movieid):
         return make_response(jsonify({"error": "Movie ID not found"}), 404)
 
 
-"""getByTitle"""
-
-
+# getMoviByTitle: retrieves one or many movies with the same name
 @app.route("/moviesbytitle", methods=['GET'])
 def get_movie_bytitle():
     json = []
@@ -58,9 +74,7 @@ def get_movie_bytitle():
     return res
 
 
-"""getByDirector"""
-
-
+# returns all movies created by a director
 @app.route("/moviesbydirector", methods=['GET'])
 def get_movie_bydriector():
     json = []
@@ -73,7 +87,7 @@ def get_movie_bydriector():
     if not json:
         res = make_response(jsonify({"error": "movie title not found"}), 404)
     else:
-        print(json,file=sys.stderr)
+        print(json, file=sys.stderr)
         res = make_response((jsonify(json)), 200)
     return res
 
@@ -94,7 +108,7 @@ def create_movie(movieid):
     return res
 
 
-"""updateMovieRating"""
+"""updateMovieRating: update the rating of a movie recovered thx to its id"""
 
 
 @app.route("/movies/<movieid>/<rate>", methods=['PUT'])
@@ -104,12 +118,11 @@ def update_movie_rating(movieid, rate):
             movie["rating"] = float(rate)
             res = make_response(jsonify(movie), 200)
             return res
-
     res = make_response(jsonify({"error": "movie ID not found"}), 201)
     return res
 
 
-"""deleteMovie"""
+"""deleteMovie: deletes a movie, removes the move from the db"""
 
 
 @app.route("/movies/<movieid>", methods=['DELETE'])
@@ -126,4 +139,4 @@ def del_movie(movieid):
 if __name__ == "__main__":
     # p = sys.argv[1]
     print("Server running in port %s" % (PORT))
-    app.run(host=HOST, port=PORT)
+    app.run(host=HOST, port=PORT, debug=True)
